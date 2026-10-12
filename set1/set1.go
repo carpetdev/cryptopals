@@ -19,12 +19,12 @@ func Challenge2() {
 	hex1 := "1c0111001f010100061a024b53535009181c"
 	hex2 := "686974207468652062756c6c277320657965"
 	answer := "746865206b696420646f6e277420706c6179"
-	fmt.Println(utils.FixedXOR(hex1, hex2) == answer)
+	fmt.Println(utils.FixedXor(hex1, hex2) == answer)
 }
 
 func Challenge3() {
 	hex := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-	fmt.Println(strings.Join(utils.DecryptXOR(hex), "\n"))
+	fmt.Println(strings.Join(utils.DecryptXor(hex), "\n"))
 }
 
 func Challenge4() {
@@ -37,7 +37,7 @@ func Challenge4() {
 
 	for scanner.Scan() {
 		hex := scanner.Text()
-		decryptedStrings := utils.DecryptXOR(hex)
+		decryptedStrings := utils.DecryptXor(hex)
 		if len(decryptedStrings) > 0 {
 			fmt.Println(hex)
 			fmt.Println(strings.Join(decryptedStrings, "\n"))

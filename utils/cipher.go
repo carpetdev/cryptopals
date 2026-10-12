@@ -4,7 +4,7 @@ import "math"
 
 // Bruteforces a single-byte XOR cipher
 // Uses character frequency to reject non-english text
-func DecryptXOR(hexString string) (output []string) {
+func DecryptXor(hexString string) (output []string) {
 	if len(hexString)%2 == 1 {
 		panic("odd length hex string")
 	}
@@ -22,20 +22,19 @@ KeyLoop:
 		xorredBytes := make([]byte, n)
 		frequencies := make(map[byte]float64)
 		nonAlphanums := 0
-		for i, b := range bytes {
-			xorredByte := b ^ byte(key)                // TODO: this should be its own function (xor the iterator)
-			if xorredByte >= 32 && xorredByte <= 126 { // human-readable
-				if xorredByte >= 'A' && xorredByte <= 'Z' {
-					frequencies[xorredByte] += 1
-				} else if xorredByte >= 'a' && xorredByte <= 'z' {
-					frequencies[xorredByte^32] += 1
+		for i, b := range SingleByteXor(bytes, byte(key)) {
+			if b >= 32 && b <= 126 { // human-readable
+				if b >= 'A' && b <= 'Z' {
+					frequencies[b] += 1
+				} else if b >= 'a' && b <= 'z' {
+					frequencies[b^32] += 1
 				} else {
 					nonAlphanums += 1
 				}
-			} else if xorredByte != 10 { // newline
+			} else if b != 10 { // newline
 				continue KeyLoop
 			}
-			xorredBytes[i] = xorredByte
+			xorredBytes[i] = b
 		}
 		if 3*nonAlphanums > n { // probably not english
 			continue KeyLoop
@@ -44,7 +43,7 @@ KeyLoop:
 		for b, freq := range frequencies {
 			trueFreq := englishFrequenciesPercent[b] * float64(n) / 100
 			chi2 += math.Pow(freq-trueFreq, 2) / trueFreq
-		} // TODO: maybe penalise non-alphanumerics?
+		}
 		if chi2 < 38 { // 0.05 p-value for chi^2_25
 			output = append(output, string(xorredBytes))
 		}
