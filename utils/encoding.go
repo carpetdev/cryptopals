@@ -15,7 +15,7 @@ func Hex2Bytes(hexString string) iter.Seq2[int, byte] {
 
 	return func(yield func(int, byte) bool) {
 		for i := 0; i < len(hexString)/2; i++ {
-			if !yield(i, hex2Byte[hexString[2*i]]<<4|hex2Byte[hexString[2*i+1]]) {
+			if !yield(i, hex2Byte[hexString[2*i]]<<4|hex2Byte[hexString[2*i+1]]) { // TODO: handle incorrect hex (currently picks 0 i think)
 				return
 			}
 		}

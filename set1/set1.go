@@ -1,9 +1,12 @@
 package set1
 
 import (
-	"cryptopals/utils"
+	"bufio"
 	"fmt"
+	"os"
 	"strings"
+
+	"cryptopals/utils"
 )
 
 func Challenge1() {
@@ -22,4 +25,26 @@ func Challenge2() {
 func Challenge3() {
 	hex := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
 	fmt.Println(strings.Join(utils.DecryptXOR(hex), "\n"))
+}
+
+func Challenge4() {
+	file, err := os.Open("inputs/s1c4.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		hex := scanner.Text()
+		decryptedStrings := utils.DecryptXOR(hex)
+		if len(decryptedStrings) > 0 {
+			fmt.Println(hex)
+			fmt.Println(strings.Join(decryptedStrings, "\n"))
+			fmt.Println()
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		panic(err)
+	}
 }
